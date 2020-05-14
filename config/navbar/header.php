@@ -88,5 +88,10 @@ return [
             "url" => "guess-game",
             "title" => "Gissa mitt nummer",
         ],
+        [
+            "text" => "Dice game",
+            "url" => "dice-game",
+            "title" => "spela 100",
+        ],
     ],
 ];

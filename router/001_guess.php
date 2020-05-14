@@ -16,22 +16,15 @@ $app->router->get("guess/init", function () use ($app) {
     // $game = new Ylvan\Guess\Guess();
     if (!isset($_SESSION["guess"])) {
         $_SESSION["guess"] = new Ylvan\Guess\Guess();
-        // $game = $_SESSION["guess"];
-        // $_SESSION["number"] = $game->secretNumber;
-        // $_SESSION["number"] = $game->number();
     }
-    // $guess = $_SESSION["guess"];
-    // set the variables
-    // $triesLeft = $guess->triesLeft;
-    // $winnNumber = $guess->number();
-    //init session for gamestart
+
     return $app->response->redirect("guess/play");
 });
 
 
 
 /**
- * Rplay the game
+ * play the game
  */
 $app->router->post("guess/play", function () use ($app) {
 
@@ -55,14 +48,6 @@ $app->router->post("guess/play", function () use ($app) {
 
     // get the guessed number
     if ($doGuess) {
-        // if (!is_numeric($guessNum)) {
-        //     $line1 = "Not a number ";
-        //     $line2 = "<br>Please guess a number between 1-100";
-        //     $res = $line1 . $line2;
-        //     $_SESSION["res"] = $res;
-        //     $_SESSION["guessNum"] = $guessNum;
-        //     // throw new GuessException($guessNum . " is not a valid number");
-        // } else {
         $res = $game->guessResult($guessNum);
         $_SESSION["guessNum"] = $guessNum;
         $_SESSION["res"] = $res;
@@ -88,7 +73,6 @@ $app->router->post("guess/play", function () use ($app) {
 
     return $app->response->redirect("guess/play");
 });
-
 
 
 /**
