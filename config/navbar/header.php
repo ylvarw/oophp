@@ -84,14 +84,38 @@ return [
             "title" => "Anax development utilities",
         ],
         [
-            "text" => "Guess game",
-            "url" => "guess-game",
-            "title" => "Gissa mitt nummer",
+            "text" => "Underhållning",
+            "url" => "Games",
+            "title" => "gör ett val",
+            "submenu" => [
+                "items" => [
+                    [
+                        "text" => "Guess game",
+                        "url" => "guess-game",
+                        "title" => "Gissa mitt nummer",
+                    ],
+                    [
+                        "text" => "Dice game",
+                        "url" => "dice-game",
+                        "title" => "spela 100",
+                    ],
+                    [
+                        "text" => "Filmdatabas",
+                        "url" => "movie",
+                        "title" => "Filmer",
+                    ],
+                ]
+            ]
         ],
-        [
-            "text" => "Dice game",
-            "url" => "dice-game",
-            "title" => "spela 100",
-        ],
+        // [
+        //     "text" => "Guess game",
+        //     "url" => "guess-game",
+        //     "title" => "Gissa mitt nummer",
+        // ],
+        // [
+        //     "text" => "Dice game",
+        //     "url" => "dice-game",
+        //     "title" => "spela 100",
+        // ],
     ],
 ];

@@ -20,6 +20,8 @@ body {
     background-color: lavender;
 }
 
+
+
 p {
     font-family: 'Gotu', sans-serif;
 }
@@ -36,8 +38,14 @@ h1 {
     min-height: 30em;
     align-self: center;
     width: 90%;
+    background-color: lavender;
 }
 
 /* .region-flash {
 
 } */
+
+img.thumb {
+    max-width: 100px;
+    max-height: 100px;
+} 

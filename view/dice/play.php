@@ -17,14 +17,12 @@ namespace Anax\View;
 <br>
 <?php if ($winner) : ?>
     <h2> <?= $winner ?> har uppnått 100 poäng!!</h2>
-    <form method="post">
-        <input type="submit" name="restart" value="Nytt spel">
-    </form>
+    <a href="<?= url("dice/restart")?>">Starta om spelet</a>
 <?php endif; ?>
 
 <p>Dina poäng: <?= $playerpoint ?></p>
 <p>Datorns poäng: <?= $computerpoint ?> points</p>
-<!-- <p>Du slog: <?= $diceList ?> <br> poäng för rundan: <?= $diceSum ?> </> -->
+<p>tärningslag: <?= $diceList ?>  </p>
 <br>
 
 <?php if (!$computerturn) : ?>
@@ -42,8 +40,11 @@ namespace Anax\View;
 <br>
 <!-- <p><?= $turn ?> tur</p> -->
     <form method="post">
-        <!-- Guess: <input type="int" name="guess"> -->
         <input type="submit" name="roll" value="Slå tärningar">
         <!-- <input type="submit" name="save" value="spara"> -->
-        <input type="submit" name="restart" value="Nytt spel">
+        <!-- <input type="submit" name="restart" value="Nytt spel"> -->
     </form>
+
+    <p>
+        <a href="<?= url("dice/restart")?>">Starta om spelet</a>
+    </p>

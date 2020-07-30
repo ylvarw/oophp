@@ -32,8 +32,6 @@ class DiceTest extends TestCase
     }
 
 
-
-
     /**
     * test the sum of the dice
     */
