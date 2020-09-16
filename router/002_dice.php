@@ -1,4 +1,17 @@
 <?php
+namespace Ylvan\Game;
+
+// require './autoloader.php';
+use Ylvan\Game\Dice2;
+
+include("autoloader.php");
+include("../src/Dice/Dice2.php");
+// include(__DIR__ . "/Dice.php");
+// use Ylvan\Game\Dice as Dice;
+// $dice = new Dice();
+
+
+
 /**
  * Create routes using $app programming style.
  */
@@ -12,16 +25,12 @@ $app->router->get("dice/init", function () use ($app) {
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
     }
-    // destroy the session.
     session_destroy();
     session_name("dice");
     session_start();
-    // session_name("dice");
-    // session_start();
-    // $_SESSION["dice"] = new Ylvan\Dice\Dice();
-    // // $game = new Ylvan\Guess\Guess();
+
     if (!isset($_SESSION["dice"])) {
-        $_SESSION["dice"] = new Ylvan\Dice\Dice();
+        $_SESSION["dice"] = new Dice2();
     }
 
     return $app->response->redirect("dice/play");
@@ -31,18 +40,18 @@ $app->router->get("dice/init", function () use ($app) {
  * play the game
  */
 $app->router->post("dice/play", function () use ($app) {
-    if (!isset($_SESSION["dice"])) {
-        $_SESSION["dice"] = new Ylvan\Dice\Dice();
-    }
 
+    if (!isset($_SESSION["dice"])) {
+        $_SESSION["dice"] = new Dice2();
+    }
     $game = $_SESSION["dice"];
-    $goal = 100;
+    // global $game;
 
     $_SESSION["playersum"] ?? 0;
-    // $_SESSION["computerpoint"] ?? 0;
     $_SESSION["computersum"] ?? 0;
     $_SESSION["gameroundSum"] ?? 0;
     $_SESSION["currentplayer"] ?? "person";
+    $_SESSION["computerturn"] ?? false;
     $_SESSION["diceList"] ?? null;
     $_SESSION["haveWinner"] ?? null;
     $_SESSION["continue"] ?? 1;
@@ -50,43 +59,51 @@ $app->router->post("dice/play", function () use ($app) {
 
     $roll = $_POST["roll"] ?? null;
     $save = $_POST["save"] ?? null;
-    $restart = $_POST["restart"] ?? null;
 
     /*
-    *switch between player and computer
+    * change player
     */
     function changePlayer()
     {
         $player = $_SESSION["currentplayer"];
         if ($player === "person") {
             $_SESSION["currentplayer"] = "computer";
+            computer();
         } else {
             $_SESSION["currentplayer"] = "person";
-        }
-    }
-
-    function savepoints()
-    {
-        if ($_SESSION["currentplayer"] === "person") {
-            $_SESSION["playersum"] += $_SESSION["gameroundSum"];
-            $_SESSION["gameroundSum"] = 0;
-            checkWinner();
-            changePlayer();
-        } else {
-            $_SESSION["computersum"] += $_SESSION["gameroundSum"];
-            $_SESSION["gameroundSum"] = 0;
-            checkWinner();
-            changePlayer();
+            $_SESSION["computerturn"] = false;
         }
     }
 
     /*
-    *check dice list to see if there is a 1 to stop round
+    * save the points
+    */
+    function savepoints()
+    {
+        $player = $_SESSION["currentplayer"];
+        // if ($_SESSION["currentplayer"] === "person") {
+        if ($player === "person") {
+            $_SESSION["playersum"] += $_SESSION["gameroundSum"];
+            $_SESSION["gameroundSum"] = 0;
+            checkWinner();
+            // changePlayer();
+        } else {
+            $_SESSION["computersum"] += $_SESSION["gameroundSum"];
+            $_SESSION["gameroundSum"] = 0;
+            checkWinner();
+            // changePlayer();
+        }
+    }
+
+    /*
+    * Roll dice, changwe player if 1 in dicelist
     */
     function rollDice()
     {
-        $game = $_SESSION["dice"];
+        $game = new Dice2();
+
         $game->roll();
+        // $dices = $game->rolls;
         $dices = $game->getRolls();
         // $_SESSION["diceList"] = $game->getRolls();
 
@@ -96,40 +113,38 @@ $app->router->post("dice/play", function () use ($app) {
             // $_SESSION["diceList"] = $game->values();
             changePlayer();
         } else {
-            $_SESSION["diceList"] = $game->rolls;
+            $_SESSION["diceList"] = $game->values();
             // $_SESSION["diceList"] = $game->values();
             $_SESSION["gameroundSum"] += $game->sum();
         }
     }
 
     /*
-    *check winner
+    * Check for winner
     */
     function checkWinner()
     {
-        // check if current player have 100 points
-        if ($_SESSION["playersum"] >= 100) {
-            $_SESSION["haveWinner"] = "Grattis! Du";
-        }
+        // $player = $_SESSION["currentplayer"];
+        $computer = $_SESSION["computerturn"];
 
-        if ($_SESSION["computersum"] >= 100) {
-            $_SESSION["haveWinner"] = "Datorn";
+        if ($computer === false) {
+            if ($_SESSION["gameroundSum"] >= 100) {
+                $_SESSION["haveWinner"] = "Spelare 1";
+            } else {
+                changePlayer();
+            }
+        } elseif ($computer === true) {
+            if ($_SESSION["computersum"] >= 100) {
+                $_SESSION["haveWinner"] = "datorn";
+            } else {
+                changePlayer();
+            }
         }
-        // if ($_SESSION["currentplayer"] === "person") {
-        //     if ($_SESSION["gameroundSum"] >= 100) {
-        //         $_SESSION["haveWinner"] = "Spelare 1";
-        //     } else {
-        //         changePlayer();
-        //     }
-        // } else {
-        //     if ($_SESSION["computersum"] >= 100) {
-        //         $_SESSION["haveWinner"] = "datorn";
-        //     } else {
-        //         changePlayer();
-        //     }
-        // }
     }
 
+    /*
+    * play computers turn
+    */
     function computer()
     {
         $_SESSION["computerturn"] = true;
@@ -137,36 +152,11 @@ $app->router->post("dice/play", function () use ($app) {
         // decide if computer should save or roll again
         if (rand(0, 1) == 1) {
             rollDice();
+            savepoints();
         } else {
             savepoints();
-            // checkWinner();
         }
     }
-
-
-    function restart()
-    {
-        // reset parameters and values in session
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-        }
-        // destroy the session.
-        session_destroy();
-        // session_name("dice");
-        session_start();
-
-        if (!isset($_SESSION["dice"])) {
-            $_SESSION["dice"] = new Ylvan\Dice\Dice();
-        }
-    }
-
-    // computer round.
-    if ($_SESSION["currentplayer"] === "computer") {
-        computer();
-    }
-
-
 
     // roll the dice
     if ($roll) {
@@ -176,37 +166,32 @@ $app->router->post("dice/play", function () use ($app) {
     // save points
     if ($save) {
         savepoints();
-        // checkWinner();
-    }
-
-
-    if ($restart) {
-        restart();
-        // // reset parameters and values in session
-        // if (ini_get("session.use_cookies")) {
-        //     $params = session_get_cookie_params();
-        //     setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-        // }
-        // // destroy the session.
-        // session_destroy();
-        // // session_name("dice");
-        // session_start();
-        //
-        // if (!isset($_SESSION["dice"])) {
-        //     $_SESSION["dice"] = new Ylvan\Dice\Dice();
-        // }
-    //     if (ini_get("session.use_cookies")) {
-    //         $params = session_get_cookie_params();
-    //         setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-    //     }
-    //     // destroy the session.
-    //     $game->restart();
-    //     session_destroy();
-    //     session_start();
     }
 
     return $app->response->redirect("dice/play");
 });
+
+
+
+/**
+* restart game
+ */
+ $app->router->get("dice/restart", function () use ($app) {
+
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+    }
+     // destroy the session.
+     session_destroy();
+     session_start();
+
+    if (!isset($_SESSION["dice"])) {
+        $_SESSION["dice"] = new Dice2();
+    }
+
+     return $app->response->redirect("dice/play");
+ });
 
 
 
@@ -228,8 +213,8 @@ $app->router->post("dice/play", function () use ($app) {
      $data = [
          "playerpoint" => $playersum,
          "computerpoint" => $computersum,
-         "diceList" => $_SESSION["diceList"],
-         // "diceList" => $diceList,
+         // "diceList" => $_SESSION["diceList"],
+         "diceList" => $diceList,
          "computerturn" => $computerturn,
          "diceSum" => $diceSum,
          "winner" => $winner,

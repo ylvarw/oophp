@@ -1,5 +1,7 @@
 <?php
-namespace Ylvan\Dice;
+namespace Ylvan\Game;
+
+// namespace Ylvan\Dice;
 
 /**
  * Exception class for PersonAgeException.

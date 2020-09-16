@@ -3,3 +3,13 @@
 .route-style {
     background-color: lightblue;
 }
+
+.region-main {
+    background-color: brown;
+}
+
+
+img.thumb {
+    max-width: 100px;
+    max-height: 100px;
+}

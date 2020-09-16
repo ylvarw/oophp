@@ -1,6 +1,10 @@
 <?php
 namespace Ylvan\Dice;
 
+// namespace Ylvan\Game;
+
+
+
 /**
  * Guess my number, a class supporting the game through GET, POST and SESSION.
  */
