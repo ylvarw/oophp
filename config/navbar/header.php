@@ -104,6 +104,16 @@ return [
                         "url" => "movie",
                         "title" => "Filmer",
                     ],
+                    [
+                        "text" => "textfiltrering",
+                        "url" => "textfilter/htdocs",
+                        "title" => "filter",
+                    ],
+                    [
+                        "text" => "bloggsida",
+                        "url" => "bloggpage",
+                        "title" => "blogg",
+                    ],
                 ]
             ]
         ],

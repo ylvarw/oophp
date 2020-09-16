@@ -30,6 +30,26 @@ h1 {
     color: teal;
 }
 
+button.textbutton {
+    position: relative;
+    top: 0.5em;
+    align-items: normal;
+    display: inline;
+    height: auto;
+    padding: 0;
+    perspective-origin: 0 0;
+    text-align: start;
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    font-size: inherit;
+    color: rgb(27, 59, 75);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .site-footer {
     padding-bottom: 0px;
 }
