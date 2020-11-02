@@ -34,7 +34,7 @@ $app->router->get("blogg/start", function () use ($app) {
 * Showing admin page for database CRUD.
 * update / delete page or bloggpost
  */
-$app->router->get("blogg/admin", function () use ($app) {
+$app->router->post("blogg/admin", function () use ($app) {
     $title = "dbBlogg";
 
     $contentTitle = $_POST["contentTitle"] ?? null;
@@ -63,12 +63,14 @@ $app->router->get("blogg/admin", function () use ($app) {
     if ($doEdit) {
         $editSql = "SELECT * FROM content WHERE id = ?;";
         $editRes = $app->db->execute($editSql, $doEdit);
+        $_SESSION["editRes"] = $editRes;
     }
 
     // get content from id to delete
     if ($askDelete) {
         $editSql = "SELECT * FROM content WHERE id = ?;";
         $askdeleteRes = $app->db->execute($editSql, $doEdit);
+        $_SESSION["deleteRes"] = $askdeleteRes;
     }
 
 
@@ -80,6 +82,28 @@ $app->router->get("blogg/admin", function () use ($app) {
 
     // $updateSql = "UPDATE content SET title=?, path=?, slug=?, data=?, type=?, filter=?, published=? WHERE id = ?;";
     // $app->db->execute($updateSql, array_values($params));
+
+    // $_SESSION["editRes"] = $editRes;
+    // $_SESSION["deleteRes"] = $askdeleteRes;
+
+    return $app->response->redirect("blogg/admin");
+});
+
+/**
+* Showing admin page for database CRUD.
+* update / delete page or bloggpost
+ */
+$app->router->get("blogg/admin", function () use ($app) {
+    $title = "dbBlogg";
+
+
+    $app->db->connect();
+    
+    $sql = "SELECT * FROM content;";
+    $res = $app->db->executeFetchAll($sql);
+
+    $editRes = $_SESSION["editRes"];
+    $askdeleteRes = $_SESSION["deleteRes"];
 
     $data = [
         "resultset" => $res ?? null,
