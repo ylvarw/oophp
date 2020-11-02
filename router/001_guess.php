@@ -33,7 +33,6 @@ $app->router->post("guess/play", function () use ($app) {
     $_SESSION["number"] = $game->number();
     $_SESSION["tries"] = $game->triesLeft;
 
-
     $guessNum = $_POST["guess"] ?? null;
     $doGuess = $_POST["doGuess"] ?? null;
     $doCheat = $_POST["doCheat"] ?? null;

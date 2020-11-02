@@ -9,31 +9,7 @@ if (!$resultset) {
 
 <h2>Lägg till en film</h2>
 
-<p> <?= $testVar?></p>
 
-
-<?php if ($movielist) : ?>
-    <table>
-        <tr class="first">
-            <th>Rad</th>
-            <th>Id</th>
-            <th>Bild</th>
-            <th>Titel</th>
-            <th>År</th>
-        </tr>
-        <?php $id = -1; foreach ($resultset as $row) :
-            $id++;
-            ?>
-        <tr>
-            <td><?= $id ?></td>
-            <td><?= $row->id ?></td>
-            <td><img class="thumb" src="<?= $row->image ?>"></td>
-            <td><?= $row->title ?></td>
-            <td><?= $row->year ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
-<?php endif; ?>
 <table>
     <tr class="first">
         <th>Rad</th>
@@ -58,7 +34,9 @@ if (!$resultset) {
 
 <form method="post">
     <fieldset>
-    <legend>Add movie</legend>
+    <h3>
+    <legend>Add new movie</legend>
+    </h3>
     <!-- <input type="hidden" name="movieId" value="movieId"/> -->
 
     <p>

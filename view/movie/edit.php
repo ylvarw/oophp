@@ -11,7 +11,7 @@ if (!$resultset) {
 
 <table>
     <tr class="first">
-        <th>Rad</th>
+        <!-- <th>Rad</th> -->
         <th>Id</th>
         <th>Bild</th>
         <th>Titel</th>
@@ -22,7 +22,7 @@ if (!$resultset) {
         ?>
     <tr>
         <td><?= $id ?></td>
-        <td><?= $row->id ?></td>
+        <!-- <td><?= $row->id ?></td> -->
         <td><img class="thumb" src="<?= $row->image ?>"></td>
         <td><?= $row->title ?></td>
         <td><?= $row->year ?></td>
@@ -32,26 +32,28 @@ if (!$resultset) {
 
     <form method="post">
         <fieldset>
-        <legend>edit Movie</legend>
+        <h3>
+        <legend>Edit Movie</legend>
+        </h3>
             <!-- <input type="hidden" name="movieId" value="<?= $movieId ?>"/> -->
 
             <p>
                 <label>Movie id:<br> 
-                <input type="id" name="movieId" required/>
+                <input type="number" name="movieId" required/>
                 </label>
             </p>
             <p>
-                <label>Title:<br> 
-                <input type="text" name="movieTitle"/>
+                <label>New Title:<br> 
+                <input type="text" name="movieTitle" required/>
                 </label>
             </p>
             <p>
-                <label>Year:<br> 
-                <input type="number" name="movieYear"/>
+                <label>New Year:<br> 
+                <input type="number" name="movieYear" required/>
             </p>
             <p>
-                <label>Image:<br> 
-                <input type="text" name="movieImage"/>
+                <label>New Image:<br> 
+                <input type="text" name="movieImage" placeholder= "img/noimage.png" requireds/>
                 </label>
             </p>
             
